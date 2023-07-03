@@ -1,5 +1,6 @@
 
 // smooth scroll
+let portfolioIsotope
 $(document).ready(function(){
     // Initiate the wowjs
     new WOW().init();
@@ -19,6 +20,19 @@ $(document).ready(function(){
             });
         } 
     });
+
+    portfolioIsotope = $('.portfolio-container').isotope({
+        itemSelector: '.portfolio-item',
+        layoutMode: 'fitRows'
+    });
+
+    // Show the discuss_projects section after a delay
+   /*  setTimeout(function () {
+        $('.discuss_projects').show();
+
+        // Update Isotope layout after showing the discuss_projects section
+        portfolioIsotope.isotope('layout');
+    }, 1000); */
 });
 
 // navbar toggle
@@ -35,10 +49,10 @@ $('.skill').waypoint(function () {
 }, { offset: '80%' });
 
 // Portfolio isotope and filter
-var portfolioIsotope = $('.portfolio-container').isotope({
+/* var portfolioIsotope = $('.portfolio-container').isotope({
     itemSelector: '.portfolio-item',
     layoutMode: 'fitRows'
-});
+}); */
 
 $('#portfolio-flters li').on('click', function () {
     $("#portfolio-flters li").removeClass('active');
