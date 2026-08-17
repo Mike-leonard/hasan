@@ -30,12 +30,17 @@ export function Logo({ className = '', size = 'md' }) {
     typeof logo === 'string' &&
     (logo.startsWith('/') || logo.startsWith('http://') || logo.startsWith('https://') || logo.startsWith('data:'))
   ) {
+    // Manually prepend basePath for static export — next/image with unoptimized:true
+    // does not auto-prefix the basePath, so we do it here.
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    const imageSrc = logo.startsWith('/') ? `${basePath}${logo}` : logo;
+
     return (
       <div
         className={`${selectedSize} overflow-hidden bg-zinc-900 dark:bg-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform shrink-0 relative border border-zinc-200/50 dark:border-zinc-700/50 ${className}`}
       >
         <Image
-          src={logo}
+          src={imageSrc}
           alt={PERSONAL_INFO.name || 'Logo'}
           width={dimension}
           height={dimension}
