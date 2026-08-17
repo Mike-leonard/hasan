@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import {
@@ -9,7 +8,6 @@ import {
   Compass,
   Cpu,
   Database,
-  Download,
   FileText,
   Github,
   Layers,
@@ -22,10 +20,8 @@ import {
   Sparkles
 } from 'lucide-react';
 import { PERSONAL_INFO } from '../../data/portfolioData';
-import { ResumeModal } from './ResumeModal';
 
 export function AboutSection({ onNavigate }) {
-  const [isResumeOpen, setIsResumeOpen] = useState(false);
   return (
     <section id="about" className="scroll-mt-24 py-2 sm:py-4 space-y-6 sm:space-y-8">
       {/* Top Bento Grid Hero */}
@@ -56,16 +52,15 @@ export function AboutSection({ onNavigate }) {
 
           {/* Quick CTA Actions */}
           <div className="mt-6 pt-4 border-t border-zinc-100 dark:border-[#27272a] flex flex-wrap items-center gap-2.5 sm:gap-3">
-            <button
-              onClick={() => setIsResumeOpen(true)}
-              id="btn-hero-download-cv"
-              type="button"
+            <Link
+              href="/projects"
+              id="btn-hero-explore-projects"
               className="px-3.5 sm:px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-[#09090b] text-xs font-mono font-bold transition-all hover:bg-emerald-600 dark:hover:bg-emerald-400 dark:hover:text-black flex items-center gap-2 shadow-xs group cursor-pointer"
-              title="View & Download CV (PDF)"
+              title="Explore Featured Projects"
             >
-              <Download className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" />
-              <span>Download CV</span>
-            </button>
+              <Code2 className="w-3.5 h-3.5 text-emerald-500 group-hover:scale-110 transition-transform" />
+              <span>Explore Projects</span>
+            </Link>
 
             <Link
               href="/contact"
@@ -240,12 +235,6 @@ export function AboutSection({ onNavigate }) {
           </div>
         </div>
       </div>
-
-      {/* Inline Resume PDF Previewer Modal */}
-      <ResumeModal
-        isOpen={isResumeOpen}
-        onClose={() => setIsResumeOpen(false)}
-      />
     </section>
   );
 }
