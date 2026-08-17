@@ -23,6 +23,12 @@ import { Logo } from './Logo';
 import { useTheme } from '../../hooks/useTheme';
 import { ResumeModal } from './ResumeModal';
 
+import { AboutSection } from './AboutSection';
+import { SkillsSection } from '../skills/_components/SkillsSection';
+import { ProjectsSection } from '../projects/_components/ProjectsSection';
+import { ExperienceSection } from '../experience/_components/ExperienceSection';
+import { ContactSection } from '../contact/_components/ContactSection';
+
 export const SHEETS = [
   {
     path: '/',
@@ -32,6 +38,7 @@ export const SHEETS = [
     subtitle: 'Bio & Focus',
     icon: User,
     badge: 'Executive Summary',
+    component: AboutSection,
   },
   {
     path: '/skills',
@@ -41,6 +48,7 @@ export const SHEETS = [
     subtitle: 'Competencies & Tech Radar',
     icon: Cpu,
     badge: 'Tech Radar',
+    component: SkillsSection,
   },
   {
     path: '/projects',
@@ -50,6 +58,7 @@ export const SHEETS = [
     subtitle: 'Open Source & Core Systems',
     icon: Code,
     badge: 'Selected Works',
+    component: ProjectsSection,
   },
   {
     path: '/experience',
@@ -59,6 +68,7 @@ export const SHEETS = [
     subtitle: 'Professional History',
     icon: Briefcase,
     badge: 'Timeline',
+    component: ExperienceSection,
   },
   {
     path: '/contact',
@@ -68,6 +78,7 @@ export const SHEETS = [
     subtitle: 'Inquiries & Socials',
     icon: Mail,
     badge: 'Get In Touch',
+    component: ContactSection,
   },
 ];
 
@@ -383,7 +394,7 @@ export function PaperViewportLayout({ children, docSlot }) {
 
                 <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                   <span className="hidden md:inline text-[11px] text-zinc-400 dark:text-zinc-500">
-                    Route: <code className="px-1.5 py-0.5 bg-zinc-200 dark:bg-zinc-800 rounded text-emerald-600 dark:text-emerald-400 font-mono text-[11px]">{pathname}</code>
+                    Route: <code className="px-1.5 py-0.5 bg-zinc-200 dark:bg-zinc-800 rounded text-emerald-600 dark:text-emerald-400 font-mono text-[11px]">{normalizedPathname}</code>
                   </span>
 
                   {/* Paper Corner Staple Visual */}
@@ -395,7 +406,7 @@ export function PaperViewportLayout({ children, docSlot }) {
               <div className="p-3.5 sm:p-6 lg:p-10 flex-1 overflow-x-hidden">
                 <AnimatePresence custom={direction} mode="wait">
                   <motion.div
-                    key={pathname}
+                    key={normalizedPathname}
                     custom={direction}
                     variants={paperVariants}
                     initial="enter"
@@ -403,7 +414,7 @@ export function PaperViewportLayout({ children, docSlot }) {
                     exit="exit"
                     className="w-full"
                   >
-                    {children}
+                    {currentSheet?.component ? <currentSheet.component /> : children}
                   </motion.div>
                 </AnimatePresence>
               </div>
