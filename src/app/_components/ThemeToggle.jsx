@@ -5,50 +5,68 @@ import { Moon, Sun } from 'lucide-react';
 
 export function ThemeToggle({ theme, onToggle }) {
   return (
-    <div className="inline-flex items-center gap-1 p-1 bg-zinc-200/80 dark:bg-zinc-800/80 backdrop-blur border border-zinc-300/50 dark:border-zinc-700/50 rounded-full text-xs font-medium text-zinc-600 dark:text-zinc-400">
+    <>
+      {/* Mobile: Single Compact Icon Toggle (Dark <-> Light) */}
       <button
-        onClick={() => onToggle('dark')}
-        id="theme-btn-dark"
+        onClick={() => onToggle()}
+        id="theme-btn-mobile-toggle"
         type="button"
-        className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
-          theme === 'dark'
-            ? 'text-zinc-900 dark:text-white font-semibold'
-            : 'hover:text-zinc-900 dark:hover:text-white'
-        }`}
-        title="Dark mode"
+        className="sm:hidden p-1.5 rounded-xl bg-white dark:bg-[#18181b] hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 transition-colors shadow-2xs flex items-center justify-center cursor-pointer shrink-0"
+        title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
       >
-        {theme === 'dark' && (
-          <motion.div
-            layoutId="theme-active"
-            className="absolute inset-0 bg-white dark:bg-zinc-700/90 rounded-full shadow-xs"
-            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-          />
+        {theme === 'dark' ? (
+          <Moon className="w-3.5 h-3.5 text-emerald-400" />
+        ) : (
+          <Sun className="w-3.5 h-3.5 text-amber-500" />
         )}
-        <Moon className="w-3.5 h-3.5 relative z-10 text-emerald-500 dark:text-emerald-400" />
-        <span className="relative z-10">Dark</span>
       </button>
 
-      <button
-        onClick={() => onToggle('light')}
-        id="theme-btn-light"
-        type="button"
-        className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
-          theme === 'light'
-            ? 'text-zinc-900 dark:text-white font-semibold'
-            : 'hover:text-zinc-900 dark:hover:text-white'
-        }`}
-        title="Light mode"
-      >
-        {theme === 'light' && (
-          <motion.div
-            layoutId="theme-active"
-            className="absolute inset-0 bg-white dark:bg-zinc-700/90 rounded-full shadow-xs"
-            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-          />
-        )}
-        <Sun className="w-3.5 h-3.5 relative z-10 text-amber-500" />
-        <span className="relative z-10">Light</span>
-      </button>
-    </div>
+      {/* Desktop (>= 640px): Segmented Pill Switcher */}
+      <div className="hidden sm:inline-flex items-center gap-1 p-1 bg-zinc-200/80 dark:bg-zinc-800/80 backdrop-blur border border-zinc-300/50 dark:border-zinc-700/50 rounded-full text-xs font-medium text-zinc-600 dark:text-zinc-400 shrink-0">
+        <button
+          onClick={() => onToggle('dark')}
+          id="theme-btn-dark"
+          type="button"
+          className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
+            theme === 'dark'
+              ? 'text-zinc-900 dark:text-white font-semibold'
+              : 'hover:text-zinc-900 dark:hover:text-white'
+          }`}
+          title="Dark mode"
+        >
+          {theme === 'dark' && (
+            <motion.div
+              layoutId="theme-active"
+              className="absolute inset-0 bg-white dark:bg-zinc-700/90 rounded-full shadow-xs"
+              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+            />
+          )}
+          <Moon className="w-3.5 h-3.5 relative z-10 text-emerald-500 dark:text-emerald-400" />
+          <span className="relative z-10">Dark</span>
+        </button>
+
+        <button
+          onClick={() => onToggle('light')}
+          id="theme-btn-light"
+          type="button"
+          className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors cursor-pointer ${
+            theme === 'light'
+              ? 'text-zinc-900 dark:text-white font-semibold'
+              : 'hover:text-zinc-900 dark:hover:text-white'
+          }`}
+          title="Light mode"
+        >
+          {theme === 'light' && (
+            <motion.div
+              layoutId="theme-active"
+              className="absolute inset-0 bg-white dark:bg-zinc-700/90 rounded-full shadow-xs"
+              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+            />
+          )}
+          <Sun className="w-3.5 h-3.5 relative z-10 text-amber-500" />
+          <span className="relative z-10">Light</span>
+        </button>
+      </div>
+    </>
   );
 }

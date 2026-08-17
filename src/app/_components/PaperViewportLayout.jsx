@@ -216,18 +216,18 @@ export function PaperViewportLayout({ children, docSlot }) {
       <header className="sticky top-0 z-50 pt-2 pb-2.5 sm:pt-3 sm:pb-3 px-3 sm:px-6 lg:px-8 bg-[#f4f4f5]/80 dark:bg-[#09090b]/80 backdrop-blur-xl border-b border-zinc-200/80 dark:border-zinc-800/80">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
           {/* Brand Logo & Viewport Status */}
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 shrink">
             <Link
               href="/"
               id="btn-paper-brand"
               className="flex items-center gap-2 sm:gap-2.5 group text-left focus:outline-none min-w-0"
             >
               <Logo />
-              <div className="min-w-0">
-                <div className="font-bold text-xs sm:text-sm tracking-tight text-zinc-900 dark:text-zinc-100 truncate">
+              <div className="min-w-0 flex flex-col justify-center">
+                <div className="font-bold text-xs sm:text-sm tracking-tight text-zinc-900 dark:text-zinc-100 whitespace-nowrap sm:truncate">
                   {PERSONAL_INFO.name}
                 </div>
-                <div className="text-[10px] sm:text-[11px] font-mono text-zinc-500 dark:text-zinc-400 truncate">
+                <div className="hidden sm:block text-[10px] sm:text-[11px] font-mono text-zinc-500 dark:text-zinc-400 truncate">
                   {viewMode === 'scroll'
                     ? 'Continuous Document Mode'
                     : `Sheet ${currentSheet.number} / ${SHEETS.length.toString().padStart(2, '0')} • ${currentSheet.title}`}
@@ -271,7 +271,7 @@ export function PaperViewportLayout({ children, docSlot }) {
           </nav>
 
           {/* Header Action Controls */}
-          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             {/* Actionable Resume Action Button (Opens Inline PDF Preview Modal) */}
             <button
               onClick={() => setIsResumeModalOpen(true)}
@@ -289,7 +289,7 @@ export function PaperViewportLayout({ children, docSlot }) {
               onClick={() => setViewMode(viewMode === 'paper' ? 'scroll' : 'paper')}
               id="btn-toggle-viewmode"
               type="button"
-              className={`px-2.5 sm:px-3 sm:py-1.5 rounded-xl border text-[11px] sm:text-xs font-mono transition-all flex items-center gap-1 sm:gap-1.5 shadow-sm cursor-pointer shrink-0 ${
+              className={`p-1.5 sm:px-3 sm:py-1.5 rounded-xl border text-[11px] sm:text-xs font-mono transition-all flex items-center gap-1 sm:gap-1.5 shadow-sm cursor-pointer shrink-0 ${
                 viewMode === 'scroll'
                   ? 'bg-emerald-500 text-white border-emerald-600 font-bold shadow-emerald-500/20'
                   : 'bg-white dark:bg-[#18181b] hover:bg-zinc-100 dark:hover:bg-zinc-800 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300'
@@ -300,13 +300,11 @@ export function PaperViewportLayout({ children, docSlot }) {
                 <>
                   <Maximize2 className="w-3.5 h-3.5 text-emerald-500" />
                   <span className="hidden sm:inline">Full Doc</span>
-                  <span className="sm:hidden">Doc</span>
                 </>
               ) : (
                 <>
                   <Layers className="w-3.5 h-3.5 text-white" />
                   <span className="hidden sm:inline">Paper</span>
-                  <span className="sm:hidden">Paper</span>
                 </>
               )}
             </button>
