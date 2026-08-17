@@ -204,6 +204,39 @@ export function PaperViewportLayout({ children, docSlot }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeIndex, viewMode, router]);
 
+  // Lightweight native touch swipe gestures for mobile paper navigation
+  const touchStartRef = useRef({ x: 0, y: 0, time: 0 });
+
+  const handleTouchStart = (e) => {
+    if (viewMode !== 'paper') return;
+    const touch = e.touches[0];
+    touchStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      time: Date.now(),
+    };
+  };
+
+  const handleTouchEnd = (e) => {
+    if (viewMode !== 'paper') return;
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - touchStartRef.current.x;
+    const deltaY = touch.clientY - touchStartRef.current.y;
+    const deltaTime = Date.now() - touchStartRef.current.time;
+
+    // Trigger swipe if:
+    // 1. Horizontal distance >= 45px
+    // 2. Horizontal movement >= 1.4x vertical movement (preserves smooth vertical scroll)
+    // 3. Swipe duration <= 600ms (avoids triggering on long drag/scrolls)
+    if (Math.abs(deltaX) >= 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4 && deltaTime < 600) {
+      if (deltaX < 0) {
+        goToNextSheet();
+      } else {
+        goToPrevSheet();
+      }
+    }
+  };
+
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(PERSONAL_INFO.email);
     setCopiedEmail(true);
@@ -367,8 +400,12 @@ export function PaperViewportLayout({ children, docSlot }) {
             {/* Backing Paper Layer 1 (Middle shadow) */}
             <div className="absolute inset-0 bg-zinc-100 dark:bg-[#141417] border border-zinc-300/60 dark:border-zinc-800/60 rounded-2xl sm:rounded-3xl translate-x-0.5 sm:translate-x-1.5 translate-y-1 sm:translate-y-2 rotate-[-0.6deg] sm:rotate-[-1.2deg] shadow-sm pointer-events-none transition-transform duration-300" />
 
-            {/* Foreground Paper Sheet Card */}
-            <div className="relative z-10 bg-white dark:bg-[#121215] border border-zinc-200 dark:border-[#27272a] rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden min-h-[auto] md:min-h-[620px] flex flex-col">
+            {/* Foreground Paper Sheet Card (with native mobile touch swipe handling) */}
+            <div
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              className="relative z-10 bg-white dark:bg-[#121215] border border-zinc-200 dark:border-[#27272a] rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden min-h-[auto] md:min-h-[620px] flex flex-col touch-pan-y select-none sm:select-auto"
+            >
               {/* Paper Sheet Top Bar Decorator */}
               <div className="bg-zinc-50/90 dark:bg-[#18181c]/90 border-b border-zinc-200/80 dark:border-[#27272a]/80 px-3.5 py-2.5 sm:px-6 sm:py-3.5 flex items-center justify-between text-xs font-mono text-zinc-500 dark:text-zinc-400">
                 <div className="flex items-center gap-2 sm:gap-3 min-w-0">
