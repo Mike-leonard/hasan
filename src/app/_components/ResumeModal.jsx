@@ -31,7 +31,8 @@ export function ResumeModal({ isOpen, onClose }) {
     };
   }, [isOpen]);
 
-  const resumeUrl = PERSONAL_INFO.resumeUrl || '/resume.pdf';
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  const resumeUrl = `${basePath}${PERSONAL_INFO.resumeUrl || '/resume.pdf'}`;
 
   const handlePrint = () => {
     if (iframeRef.current) {
