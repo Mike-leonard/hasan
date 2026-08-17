@@ -53,7 +53,7 @@ export const metadata = {
     siteName: 'Md Mahmudul Hasan Portfolio',
     images: [
       {
-        url: '/hsn.jpg',
+        url: `${siteUrl}/hsn.jpg`,
         width: 800,
         height: 800,
         alt: 'Md Mahmudul Hasan — Full-Stack & Android Software Engineer',
@@ -65,16 +65,16 @@ export const metadata = {
     title: 'Md Mahmudul Hasan — Full-Stack & Android Software Engineer',
     description:
       'Full-Stack Software Engineer & Android Developer with 4+ years of experience building scalable web & mobile systems.',
-    images: ['/hsn.jpg'],
+    images: [`${siteUrl}/hsn.jpg`],
     creator: '@mr_hasan',
   },
   icons: {
     icon: [
-      { url: '/hsn.jpg', type: 'image/jpeg' },
-      { url: '/icon.jpg', type: 'image/jpeg' },
+      { url: `${siteUrl}/hsn.jpg`, type: 'image/jpeg' },
+      { url: `${siteUrl}/icon.jpg`, type: 'image/jpeg' },
     ],
-    shortcut: '/hsn.jpg',
-    apple: '/hsn.jpg',
+    shortcut: `${siteUrl}/hsn.jpg`,
+    apple: `${siteUrl}/hsn.jpg`,
   },
   alternates: {
     canonical: '/',

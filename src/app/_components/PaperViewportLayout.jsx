@@ -121,10 +121,14 @@ export function PaperViewportLayout({ children, docSlot }) {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
 
+  // Normalize pathname: strip trailing slash added by trailingSlash:true in next.config.js
+  // e.g. usePathname() returns '/skills/' but SHEETS paths are '/skills'
+  const normalizedPathname = pathname === '/' ? '/' : pathname.replace(/\/$/, '');
+
   // Find index of current route path
   const activeIndex = Math.max(
     0,
-    SHEETS.findIndex((sheet) => sheet.path === pathname)
+    SHEETS.findIndex((sheet) => sheet.path === normalizedPathname)
   );
 
   const prevIndexRef = useRef(activeIndex);
@@ -149,13 +153,13 @@ export function PaperViewportLayout({ children, docSlot }) {
   const goToNextSheet = () => {
     const nextIdx = activeIndex < SHEETS.length - 1 ? activeIndex + 1 : 0;
     setDirection(nextIdx > activeIndex ? 1 : -1);
-    router.push(SHEETS[nextIdx].path);
+    router.push(SHEETS[nextIdx].path, { scroll: false });
   };
 
   const goToPrevSheet = () => {
     const prevIdx = activeIndex > 0 ? activeIndex - 1 : SHEETS.length - 1;
     setDirection(prevIdx < activeIndex ? -1 : 1);
-    router.push(SHEETS[prevIdx].path);
+    router.push(SHEETS[prevIdx].path, { scroll: false });
   };
 
   const handleNavClick = (e, sheet) => {
@@ -176,15 +180,15 @@ export function PaperViewportLayout({ children, docSlot }) {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target?.tagName)) return;
 
       if (e.key === '1') {
-        router.push('/');
+        router.push('/', { scroll: false });
       } else if (e.key === '2') {
-        router.push('/skills');
+        router.push('/skills', { scroll: false });
       } else if (e.key === '3') {
-        router.push('/projects');
+        router.push('/projects', { scroll: false });
       } else if (e.key === '4') {
-        router.push('/experience');
+        router.push('/experience', { scroll: false });
       } else if (e.key === '5') {
-        router.push('/contact');
+        router.push('/contact', { scroll: false });
       } else if (viewMode === 'paper') {
         if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === 'l' || e.key === 'j') {
           goToNextSheet();
@@ -233,7 +237,7 @@ export function PaperViewportLayout({ children, docSlot }) {
           {/* Desktop Route Navigation Tabs with Quick Shortcut Numbers */}
           <nav className="hidden lg:flex items-center gap-1 bg-white/80 dark:bg-[#18181b]/80 p-1.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs text-xs">
             {SHEETS.map((sheet, index) => {
-              const isActive = pathname === sheet.path;
+              const isActive = pathname === sheet.path || normalizedPathname === sheet.path;
               const Icon = sheet.icon;
               return (
                 <Link
@@ -323,7 +327,7 @@ export function PaperViewportLayout({ children, docSlot }) {
         {/* Mobile Route Navigation Tabs */}
         <div className="lg:hidden flex items-center gap-1.5 overflow-x-auto pt-2.5 pb-0.5 scrollbar-none text-xs -mx-1 px-1 touch-pan-x">
           {SHEETS.map((sheet) => {
-            const isActive = pathname === sheet.path;
+            const isActive = pathname === sheet.path || normalizedPathname === sheet.path;
             const Icon = sheet.icon;
             return (
               <Link
