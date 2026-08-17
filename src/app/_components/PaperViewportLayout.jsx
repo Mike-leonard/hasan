@@ -82,41 +82,32 @@ export const SHEETS = [
   },
 ];
 
-// Motion variants for physical paper swapping
+// High-performance GPU-accelerated motion variants (zero blur filters for 60/120fps mobile smoothness)
 const paperVariants = {
   enter: (direction) => ({
-    x: direction > 0 ? 160 : -160,
-    y: direction > 0 ? 40 : -40,
-    rotateZ: direction > 0 ? 8 : -8,
-    scale: 0.92,
+    x: direction > 0 ? 50 : -50,
     opacity: 0,
-    filter: 'blur(4px)',
+    scale: 0.98,
   }),
   center: {
     zIndex: 10,
     x: 0,
-    y: 0,
-    rotateZ: 0,
-    scale: 1,
     opacity: 1,
-    filter: 'blur(0px)',
+    scale: 1,
     transition: {
       type: 'spring',
-      stiffness: 280,
-      damping: 26,
-      mass: 0.85,
+      stiffness: 360,
+      damping: 30,
+      mass: 0.65,
     },
   },
   exit: (direction) => ({
     zIndex: 0,
-    x: direction < 0 ? 180 : -180,
-    y: direction < 0 ? 50 : -50,
-    rotateZ: direction < 0 ? -10 : 10,
-    scale: 0.9,
+    x: direction < 0 ? 50 : -50,
     opacity: 0,
-    filter: 'blur(6px)',
+    scale: 0.98,
     transition: {
-      duration: 0.32,
+      duration: 0.18,
       ease: [0.32, 0.72, 0, 1],
     },
   }),
@@ -373,13 +364,13 @@ export function PaperViewportLayout({ children, docSlot }) {
             <div className="absolute -inset-2 sm:-inset-4 bg-gradient-to-tr from-emerald-500/15 via-teal-500/10 to-cyan-500/15 rounded-3xl blur-2xl opacity-70 dark:opacity-40 pointer-events-none transition-all duration-500" />
 
             {/* Backing Paper Layer 2 (Bottom shadow) */}
-            <div className="absolute inset-0 bg-zinc-200/70 dark:bg-zinc-900/60 border border-zinc-300/40 dark:border-zinc-800/40 rounded-2xl sm:rounded-3xl translate-x-1 sm:translate-x-3 translate-y-2 sm:translate-y-4 rotate-[0.8deg] sm:rotate-[1.8deg] shadow-xs pointer-events-none transition-transform duration-300 backdrop-blur-xs" />
+            <div className="absolute inset-0 bg-zinc-200/80 dark:bg-zinc-900/80 border border-zinc-300/40 dark:border-zinc-800/40 rounded-2xl sm:rounded-3xl translate-x-1 sm:translate-x-3 translate-y-2 sm:translate-y-4 rotate-[0.8deg] sm:rotate-[1.8deg] shadow-xs pointer-events-none transition-transform duration-300" />
 
             {/* Backing Paper Layer 1 (Middle shadow) */}
-            <div className="absolute inset-0 bg-zinc-100/90 dark:bg-[#141417] border border-zinc-300/60 dark:border-zinc-800/60 rounded-2xl sm:rounded-3xl translate-x-0.5 sm:translate-x-1.5 translate-y-1 sm:translate-y-2 rotate-[-0.6deg] sm:rotate-[-1.2deg] shadow-sm pointer-events-none transition-transform duration-300 backdrop-blur-xs" />
+            <div className="absolute inset-0 bg-zinc-100 dark:bg-[#141417] border border-zinc-300/60 dark:border-zinc-800/60 rounded-2xl sm:rounded-3xl translate-x-0.5 sm:translate-x-1.5 translate-y-1 sm:translate-y-2 rotate-[-0.6deg] sm:rotate-[-1.2deg] shadow-sm pointer-events-none transition-transform duration-300" />
 
             {/* Foreground Paper Sheet Card */}
-            <div className="relative z-10 bg-white/95 dark:bg-[#121215]/95 backdrop-blur-md border border-zinc-200 dark:border-[#27272a] rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden min-h-[auto] md:min-h-[620px] flex flex-col">
+            <div className="relative z-10 bg-white dark:bg-[#121215] border border-zinc-200 dark:border-[#27272a] rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden min-h-[auto] md:min-h-[620px] flex flex-col">
               {/* Paper Sheet Top Bar Decorator */}
               <div className="bg-zinc-50/90 dark:bg-[#18181c]/90 border-b border-zinc-200/80 dark:border-[#27272a]/80 px-3.5 py-2.5 sm:px-6 sm:py-3.5 flex items-center justify-between text-xs font-mono text-zinc-500 dark:text-zinc-400">
                 <div className="flex items-center gap-2 sm:gap-3 min-w-0">
@@ -402,7 +393,7 @@ export function PaperViewportLayout({ children, docSlot }) {
                 </div>
               </div>
 
-              {/* Animated Paper Sheet Content Area */}
+              {/* Animated Paper Sheet Content Area (GPU accelerated) */}
               <div className="p-3.5 sm:p-6 lg:p-10 flex-1 overflow-x-hidden">
                 <AnimatePresence custom={direction} mode="wait">
                   <motion.div
@@ -412,7 +403,7 @@ export function PaperViewportLayout({ children, docSlot }) {
                     initial="enter"
                     animate="center"
                     exit="exit"
-                    className="w-full"
+                    className="w-full transform-gpu will-change-transform"
                   >
                     {currentSheet?.component ? <currentSheet.component /> : children}
                   </motion.div>
